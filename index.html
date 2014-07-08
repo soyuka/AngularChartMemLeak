@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .chart {
+            width: 1000px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+
+<div ng-controller="home as vm">
+
+    <div
+            data-ac-chart="'line'"
+            data-ac-data="vm.chart.data"
+            data-ac-config="vm.chart.config"
+            class="chart">
+    </div>
+
+</div>
+
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/d3/d3.js"></script>
+<script src="bower_components/angular-charts/dist/angular-charts.js"></script>
+<script src="bower_components/moment/moment.js"></script>
+<script>
+    var app = angular.module("app", ["angularCharts"]);
+
+    app.controller("home", function($interval) {
+        var vm = this;
+        vm.chart = {};
+        vm.chart.config = {
+            title: 'Products',
+            tooltips: true,
+            labels: false,
+            legend: {
+                display: false,
+                //could be 'left, right'
+                position: 'right'
+            }
+        };
+
+        vm.chart.data = {
+            series: [],
+            data: []
+        };
+
+        getData();
+
+        $interval(getData, 10000);
+
+        function getData() {
+            vm.chart.data.series = ['', '', ''];
+            vm.chart.data.data = [];
+            for(var i = 0; i < 15; i++) {
+                vm.chart.data.data.push({
+                   x: moment().subtract('seconds', i * 30).format('HH:mm:ss'),
+                   y: [getRandomNumber(), getRandomNumber(), getRandomNumber()]
+                });
+            }
+        }
+
+
+        function getRandomNumber() {
+            return Math.floor((Math.random() * 1000) + 1);
+        }
+
+    })
+</script>
+</body>
+</html>
